@@ -1,4 +1,4 @@
-&rb;-pid;-controller
+rb-pid-controller
 ==========
 
 Description
