@@ -1,7 +1,7 @@
+require "rubygems"
+require "rb-pid-controller"
 
-require "../lib/rb-pid-controller/pid.rb"
-
-pid = PID.new(10,1,1)
+pid = PIDController::PID.new(10,1,1)
 pid.set_consign(10)
 
 loop do 
