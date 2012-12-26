@@ -5,13 +5,14 @@ module PIDController
 
     attr_accessor :kp, :ki, :kd, :consign
     
-    def initialize(kp = 1 ,ki = 1,kd = 1)
+    def initialize(kp = 1 ,ki = 1,kd = 1, history_depth_=-1)
       # save pid coefficient
-      @kp = kp.to_f
-      @ki = ki.to_f
-      @kd = kd.to_f
-      @consign = nil
-    
+      @kp            = kp.to_f
+      @ki            = ki.to_f
+      @kd            = kd.to_f
+      @history_depth = history_depth_
+      @consign       = nil
+
       self.reset 
       
     end
@@ -66,7 +67,20 @@ module PIDController
     
     # compute the integrative term
     def integrative(error,dt)
+      # classic mode
       @integrative = @integrative + error*dt
+
+      # window mode
+      if(@history_depth != -1)
+        @history << error*dt                     # push last sample
+        @history = @history.last(@history_depth) # keep the last one
+        @integrative =  0
+        @history.each { |e|
+          @integrative +=e
+        }
+        @integrative /= @history_depth          # normalize
+      end
+
       return @ki*@integrative
     end
     
