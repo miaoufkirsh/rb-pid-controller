@@ -12,6 +12,7 @@ module PIDController
       @kd            = kd.to_f
       @history_depth = history_depth_
       @consign       = nil
+      @history       = Array.new
 
       self.reset 
       
@@ -26,7 +27,7 @@ module PIDController
     
     def <<(value)
       e,dt = error(value)
-      
+
       out = proportional(e) + integrative(e,dt) + derivative(e,dt)
       @previous_error = e
       
